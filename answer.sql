@@ -1,13 +1,15 @@
-SELECT
-  it.investor_id,
-  s.sector_name,
-  ROUND(
-    100.0 * SUM(it.no_of_shares) /
-    (SELECT SUM(no_of_shares)
-     FROM investor_transactions t
-     WHERE t.investor_id = it.investor_id)
-  , 2) AS percentage
-FROM investor_transactions it
-JOIN sectors s ON s.sector_id = it.sector_id
-GROUP BY it.investor_id, s.sector_name
-ORDER BY it.investor_id, s.sector_name;
+WITH investor_totals AS (
+    SELECT investor_id, SUM(no_of_shares) AS total_shares
+    FROM investor_transactions
+    GROUP BY investor_id
+)
+SELECT 
+    t.investor_id,
+    s.sector_name,
+    ROUND( (t.no_of_shares * 1.0 / it.total_shares) * 100 , 2 ) AS percentage
+FROM investor_transactions t
+JOIN investor_totals it
+    ON t.investor_id = it.investor_id
+JOIN sectors s
+    ON t.sector_id = s.sector_id
+ORDER BY t.investor_id, s.sector_name
