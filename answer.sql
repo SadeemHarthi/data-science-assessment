@@ -6,7 +6,7 @@ WITH investor_totals AS (
 SELECT 
     t.investor_id,
     s.sector_name,
-    ROUND(t.no_of_shares * 1.0 / it.total_shares, 1) AS share_percentage
+    ROUND(t.no_of_shares * 100.0 / it.total_shares, 1) AS share_percentage
 FROM investor_transactions AS t
 JOIN investor_totals AS it
     ON t.investor_id = it.investor_id
