@@ -12,4 +12,4 @@ JOIN investor_totals it
    ON t.investor_id = it.investor_id
 JOIN sectors s
    ON t.sector_id = s.sector_id
-ORDER BY t.investor_id, s.sector_name;
+ORDER BY t.investor_id, s.sector_name
